@@ -7,5 +7,5 @@ class CreateUsers < ActiveRecord::Migration
 			t.string "password", :limit => 40
       t.timestamps
     end
-  end
+  end 
 end
