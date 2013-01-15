@@ -1,0 +1,27 @@
+<div class="page list">
+  <h2>Pages</h2>
+  
+  <table class="listing" summary="Page list">
+    <tr class="header">
+      <th>&nbsp;</th>
+      <th>Subject</th>
+      <th>Name</th>
+      <th>Permalink</th>
+      <th>Visible</th>
+    </tr>
+    <% @pages.each do |page| %>
+    <tr>
+      <td><%= page.position %></td>
+      <td><%= page.subject.name %></td>
+      <td><%= page.name %></td>
+      <td><%= page.permalink %></td>
+      <td class="center"><%= page.visible ? 'Yes' : 'No' %></td>
+      <td class="actions">
+        <%= link_to("Show", {:action => 'show', :id => page.id}, :class => 'action show') %>
+        <%= link_to("Edit", {:action => 'edit', :id => page.id}, :class => 'action edit') %>
+        <%= link_to("Delete", {:action => 'delete', :id => page.id}, :class => 'action delete') %>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+</div>
