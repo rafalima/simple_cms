@@ -16,5 +16,18 @@ class SectionsController < ApplicationController
 	def new
 		@section = Section.new
 	end
+	
+	def create
+	  @section = Section.new(params[:section])
+	  
+	  if @section.save
+	    redirect_to(:action => 'show', :id => @section.id)
+	  else
+	    render('new')
+    end
+    
+  end
+  
+  
 
 end
