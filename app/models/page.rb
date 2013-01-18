@@ -7,5 +7,6 @@ class Page < ActiveRecord::Base
   #went against Rails convention, therefore, the class_name must be set.
   has_and_belongs_to_many :editors, :class_name => "AdminUser"
   
+  
 end
   

@@ -56,10 +56,6 @@ class SubjectsController < ApplicationController
     redirect_to(:action => "list")
     
   end
-  
-  def rafa
-    @rafa = "eh noi"
-  end
 
 
 end
