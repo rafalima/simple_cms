@@ -1,4 +1,7 @@
 class DemoController < ApplicationController
+  
+  layout 'admin'
+  
   def index	
 	 @id = params[:id].to_i
 	 @page = params[:page].to_i
@@ -14,6 +17,12 @@ class DemoController < ApplicationController
 	 render(:text => 'something')
   end
 	
+	def javascript		
+	end
+	
+	def text_helpers
+		
+	end
   
   
 end
