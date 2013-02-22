@@ -4,6 +4,8 @@ class Page < ActiveRecord::Base
   belongs_to :subject
   has_many :sections
   
+  validates_presence_of :name, :permalink
+  
   #went against Rails convention, therefore, the class_name must be set.
   has_and_belongs_to_many :editors, :class_name => "AdminUser"
   
