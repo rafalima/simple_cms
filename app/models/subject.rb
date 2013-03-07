@@ -4,7 +4,11 @@ class Subject < ActiveRecord::Base
   #has_one :page
   has_many :pages
   
-  validates_presence_of :name
+  
+  # validates_presence_of :name
+  # validates_length_of :name, :maximum => 255
+  
+  validates :name, :presence => true, :length => { :maximum => 2, :message => "Fuck no"}
   
   scope :visible, where(:visible => true)
   scope :invisible, where(:visible => false)
