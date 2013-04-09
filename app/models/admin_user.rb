@@ -1,5 +1,8 @@
+require 'digest/sha1'
+
 class AdminUser < ActiveRecord::Base
-  attr_accessible :first_name,:last_name,:username
+  attr_accessible :first_name,:last_name,:username, :email
+  # attr_protected :hash_password, :salt
   
   #To configure a different table name if needed
   #set_table_name("admin_users")
@@ -7,6 +10,8 @@ class AdminUser < ActiveRecord::Base
   has_and_belongs_to_many :pages
   has_many :section_edits
   has_many :sections, :through => :section_edits
+  
+  attr_accessor  :password
   
   EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
   
@@ -28,8 +33,55 @@ class AdminUser < ActiveRecord::Base
   validates :username, :presence => true, :uniqueness => true, :length => {:within => 8..25}
   validates :email, :presence => true, :length => { :maximum => 100 }, :format => EMAIL_REGEX, :confirmation => true
   
+  validates_length_of :password, :within => 8..25, :on => :create
+  
+  before_save :create_hashed_password
+  after_save :clear_password
+  
   
   scope :named, lambda {|first, last| where(:first_name => first, :last_name => last)}
+  
+  def self.make_salt(username="")
+    Digest::SHA1.hexdigest("Use #{username} with #{Time.now} to make salt")
+  end
+  
+  def self.hash_with_salt(password="",salt="")
+    Digest::SHA1.hexdigest("Put #{salt} on the #{password}")
+  end
+  
+  # def self.hash(password="")
+    # Digest::SHA1.hexdigest(password)
+  # end
+  
+  def self.authenticate(username="", password="")    
+    user = AdminUser.where({:name => username})
+    
+    if user == nil
+      return false
+    end
+    
+    
+    
+    
+    
+    
+  end
+  
+  
+  private
+  
+  def create_hashed_password
+    # Whenever :password has a value hashing is needed
+    unless password.blank?
+      self.salt = AdminUser.make_salt(username) if salt.blank?
+      self.hashed_password = AdminUser.hash_with_salt(password,salt)
+    end
+  end
+  
+  def clear_password
+    self.password = nil
+  end
+  
     
   
 end
