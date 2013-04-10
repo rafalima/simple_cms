@@ -54,17 +54,19 @@ class AdminUser < ActiveRecord::Base
   # end
   
   def self.authenticate(username="", password="")    
-    user = AdminUser.where({:name => username})
+    user = AdminUser.find_by_username(username)
     
-    if user == nil
+    if user && user.password_match?(password)
+      return user 
+    else
       return false
-    end
+    end 
     
-    
-    
-    
-    
-    
+  end
+  
+  
+  def password_match?(password="")
+    hashed_password == AdminUser.hash_with_salt(password,salt)
   end
   
   
