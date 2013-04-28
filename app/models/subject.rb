@@ -1,4 +1,7 @@
+#require 'lib/position_mover'
 class Subject < ActiveRecord::Base
+  #include PositionMover
+
   attr_accessible :name, :position, :visible,:created_at,:updated_at
   
   #has_one :page
@@ -12,7 +15,8 @@ class Subject < ActiveRecord::Base
   
   scope :visible, where(:visible => true)
   scope :invisible, where(:visible => false)
+  scope :sorted, order('subjects.position ASC')
   scope :search, lambda {|query| where(["name LIKE ?","%#{query}%"])}
   
-  
+ 
 end
