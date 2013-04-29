@@ -1,7 +1,9 @@
 require 'digest/sha1'
 
 class AdminUser < ActiveRecord::Base
-  attr_accessible :first_name,:last_name,:username, :email
+  attr_accessor  :password
+  
+  attr_accessible :first_name,:last_name,:username, :email, :password
   # attr_protected :hash_password, :salt
   
   #To configure a different table name if needed
@@ -11,7 +13,7 @@ class AdminUser < ActiveRecord::Base
   has_many :section_edits
   has_many :sections, :through => :section_edits
   
-  attr_accessor  :password
+  
   
   EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
   
@@ -28,18 +30,19 @@ class AdminUser < ActiveRecord::Base
   
   #SEXY VALIDATION METHODS
   
-  validates :first_name, :presence => true, :length => {:maximum => 25}
-  validates :last_name, :presence => true, :length => {:maximum => 50}
-  validates :username, :presence => true, :uniqueness => true, :length => {:within => 8..25}
+  validates :first_name, :presence => true, :length => {:minimum => 2}
+  validates :last_name, :presence => true, :length => {:minimum => 2}
+  validates :username, :presence => true, :uniqueness => true, :length => {:within => 1..5}
   validates :email, :presence => true, :length => { :maximum => 100 }, :format => EMAIL_REGEX, :confirmation => true
   
-  validates_length_of :password, :within => 8..25, :on => :create
+  validates_length_of :password, :within => 1..3, :on => :create
   
   before_save :create_hashed_password
   after_save :clear_password
   
   
   scope :named, lambda {|first, last| where(:first_name => first, :last_name => last)}
+  scope :sorted, order("admin_users.last_name ASC, admin_users.first_name ASC")
   
   def self.make_salt(username="")
     Digest::SHA1.hexdigest("Use #{username} with #{Time.now} to make salt")
@@ -67,6 +70,10 @@ class AdminUser < ActiveRecord::Base
   
   def password_match?(password="")
     hashed_password == AdminUser.hash_with_salt(password,salt)
+  end
+  
+  def full_name
+    "#{first_name} #{last_name}"
   end
   
   

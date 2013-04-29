@@ -8,7 +8,7 @@ class Subject < ActiveRecord::Base
   # validates_presence_of :name
   # validates_length_of :name, :maximum => 255
   
-  validates :name, :presence => true, :length => { :maximum => 2, :message => "Fuck no"}
+  validates :name, :presence => true, :length => { :maximum => 10, :message => "name too shorty"}
   
   scope :visible, where(:visible => true)
   scope :invisible, where(:visible => false)

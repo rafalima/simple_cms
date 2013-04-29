@@ -1,6 +1,8 @@
 class SectionsController < ApplicationController
-
+  require 'debugger'
   layout 'admin'
+
+  before_filter :find_page
 
 	def index
 		list
@@ -8,7 +10,7 @@ class SectionsController < ApplicationController
 	end
 
 	def list
-		@sections = Section.order("sections.position ASC")	
+		@sections = Section.order("sections.position ASC").where(:page_id => @page.id)
 	end
 	
 	def show
@@ -16,8 +18,8 @@ class SectionsController < ApplicationController
 	end
 	
 	def new
-		@section = Section.new
-		@section_count = Section.count + 1
+		@section = Section.new(:page_id => @page.id)
+		@section_count = @page.sections.size + 1
 	end
 	
 	def create
@@ -25,9 +27,9 @@ class SectionsController < ApplicationController
 	  
 	  if @section.save
 	  	flash[:notice] = "Section created"
-	    redirect_to(:action => 'show', :id => @section.id)
+	    redirect_to(:action => 'show', :id => @section.id, :page_id => @section.page_id)
 	  else
-	    @section_count = Section.count + 1
+		  @section_count = @page.sections.size + 1
 	    render('new')	    
     end
     
@@ -35,7 +37,7 @@ class SectionsController < ApplicationController
   
   def edit
   	@section = Section.find(params[:id])
-  	@section_count = Section.count  	
+	  @section_count = @page.sections.size
   end
   
   def update
@@ -43,9 +45,9 @@ class SectionsController < ApplicationController
   	
   	if @section.update_attributes(params[:section])
   		flash[:notice] = "Section updated"
-  		redirect_to(:action => "show",:id => @section.id)
+  		redirect_to(:action => "show",:id => @section.id, :page_id => @section.page_id)
   	else
-  	  @section_count = Section.count
+	    @section_count = @page.sections.size
   		render("edit")  		
   	end
   end
@@ -58,9 +60,17 @@ class SectionsController < ApplicationController
   	Section.find(params[:id]).destroy
   	
   	flash[:notice] = "Section destroyed"
-  	redirect_to(:action => "list")
+  	redirect_to(:action => "list", :page_id => @page.id)
   end
-  
+ 
+  private
+
+  def find_page
+    if params[:page_id]
+      @page = Page.find_by_id(params[:page_id])
+    end
+  end
+
   
 
 end
