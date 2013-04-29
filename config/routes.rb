@@ -4,7 +4,8 @@ SimplesCms::Application.routes.draw do
   
   match 'admin', :to => 'access#menu'
   
-  match ':controller(/:action(/:id))(.:format)'
+  # match ':controller(/:action(/:id))(.:format)'
+  match ':controller(/:action(/:id(.:format)))'
   
   
   # get "demo/index"
