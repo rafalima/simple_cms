@@ -1,8 +1,10 @@
 SimplesCms::Application.routes.draw do
 
-  root :to => "demo#index"
+  root :to => "public#show"
   
   match 'admin', :to => 'access#menu'
+  match 'show/:id', :to => 'public#show'
+
   
   # match ':controller(/:action(/:id))(.:format)'
   match ':controller(/:action(/:id(.:format)))'

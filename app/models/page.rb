@@ -1,8 +1,8 @@
-#require 'lib/assets/position_mover'
+require 'position_mover'
 class Page < ActiveRecord::Base
   attr_accessible :subject_id,:name, :permalink, :position,:visible
     
-  #include PositionMover
+  include PositionMover
 
   belongs_to :subject
   has_many :sections

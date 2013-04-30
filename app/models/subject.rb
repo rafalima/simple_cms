@@ -1,6 +1,6 @@
-#require 'lib/position_mover'
+require 'position_mover'
 class Subject < ActiveRecord::Base
-  #include PositionMover
+  include PositionMover
 
   attr_accessible :name, :position, :visible,:created_at,:updated_at
   

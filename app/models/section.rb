@@ -1,8 +1,8 @@
-#require 'lib/assets/position_mover'
+require 'position_mover'
 class Section < ActiveRecord::Base
   attr_accessible :page_id,:name, :position, :visible, :content_type, :content
 
-  #include PositionMover
+  include PositionMover
 
   belongs_to :page
   has_many :section_edits
@@ -16,10 +16,13 @@ class Section < ActiveRecord::Base
     :message => "must be one of: #{CONTENT_TYPES.join(',')}"
   validates_presence_of :content
 
+  scope :sorted, order('sections.position ASC')
+  scope :visible, where(:visible => true)
+
   private
 
   def position_scope
-    "section.page_id = #{page_id.to_i}"
+    "sections.page_id = #{page_id.to_i}"
   end
 
 
